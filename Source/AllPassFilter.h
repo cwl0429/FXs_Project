@@ -13,6 +13,7 @@
 #include "JuceHeader.h"
 #include <vector>
 
+template<typename sampleType>
 class AllPassFilter
 {
 public:
@@ -20,18 +21,18 @@ public:
 
     ~AllPassFilter();
 
-    double calcOutput(double input);
+    sampleType calcOutput(sampleType input);
 
-    void setR(double myR);
+    void setR(sampleType myR);
 
-    void setCutoffFrequency(double myfc);
+    void setCutoffFrequency(sampleType myfc);
 
     void reset();
 
 private:
-    double delay1X=0, delay2X=0, delay1Y=0, delay2Y=0;
+    sampleType delay1X=0, delay2X=0, delay1Y=0, delay2Y=0;
     
-    double R=0.8;
-    double fc=1300;
-    double sampleRate=44100;
+    sampleType R=0.8;
+    sampleType fc=1300;
+    sampleType sampleRate=44100;
 };

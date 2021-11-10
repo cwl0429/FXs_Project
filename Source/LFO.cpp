@@ -9,16 +9,18 @@
 */
 
 #include "LFO.h"
-LFO::LFO() :waveType(Wave::sine)
+
+template<typename sampleType>
+LFO<sampleType>::LFO() :waveType(Wave::sine)
 {
-    double theta;
-    double sine;
+    sampleType theta;
+    sampleType sine;
 
     /*sine and square build*/
 
-    for (int i = 0; i < 1024; ++i)
+    for (int i = 0; i < 44100; ++i)
     {
-        theta = juce::MathConstants<double>::twoPi* i / 1024;
+        theta = juce::MathConstants<sampleType>::twoPi* i / 44100;
         sine = std::sin(theta);
         sineWave[i] = sine;
         squareWave[i] = (sine > 0) ? 1 : -1;
@@ -26,16 +28,16 @@ LFO::LFO() :waveType(Wave::sine)
 
     /*triangle build*/
     
-    for (int i = 0; i < 1024; ++i)
+    for (int i = 0; i < 44100; ++i)
     {
-        double slope = 1 / 256;
+        sampleType slope = 1 / 11025;
         
         
-        if (i < 256)
+        if (i < 11025)
         {
             triangleWave[i] = i * slope;
         }
-        else if (i < 763)
+        else if (i < 33075)
         {
             triangleWave[i] = triangleWave[i - 1] - slope;
         }
@@ -48,11 +50,11 @@ LFO::LFO() :waveType(Wave::sine)
 
     /*sawtooth build*/
 
-    for (int i = 0; i < 1024; ++i)
+    for (int i = 0; i < 44100; ++i)
     {
-        double slope = 1 / 512;
+        sampleType slope = 1 / 22050;
 
-        if (i < 512)
+        if (i < 22050)
         {
             sawtoothWave[i] = i * slope;
         }
@@ -64,37 +66,42 @@ LFO::LFO() :waveType(Wave::sine)
     
 }
 
-LFO::~LFO()
+template<typename sampleType>
+LFO<sampleType>::~LFO()
 {
 
 }
 
-void LFO::setFrequency(double newFrequency)
+template<typename sampleType>
+void LFO<sampleType>::setFrequency(sampleType newFrequency)
 {
-    //if (newFrequency <= 20 && newFrequency > 0)
-        frequency = newFrequency;
-    //else
-       // frequency = 5;
+    
+    frequency = newFrequency;
+    
 }
 
-void LFO::setLevel(double newLevel)
+/*template<typename sampleType>
+void LFO<sampleType>::setLevel(sampleType newLevel)
 {
     level = newLevel;
-}
+}*/
 
-void LFO::setWaveForm(Wave newWaveType)
+template<typename sampleType>
+void LFO<sampleType>::setWaveForm(Wave newWaveType)
 {
     waveType = newWaveType;
 }
 
-void LFO::setSampleRate(double newSampleRate)
+template<typename sampleType>
+void LFO<sampleType>::setSampleRate(sampleType newSampleRate)
 {
     sampleRate = newSampleRate;
 }
 
-double LFO::getCurrentValue()
+template<typename sampleType>
+sampleType LFO<sampleType>::getCurrentValue()
 {
-    double* output;
+    sampleType* output;
     int index;
     currentAngle += frequency / sampleRate;
     if (currentAngle >= 1)
@@ -116,15 +123,19 @@ double LFO::getCurrentValue()
             output = sawtoothWave;
             break;
         default:
-            output = sineWave;
+            output = squareWave;
             break;
     }
-    index = std::floor(currentAngle * 1024);
+    index = std::floor(currentAngle * 44100) ;
     
-    return output[index]*level;
+    return output[index];
 }
 
-void LFO::reset()
+template<typename sampleType>
+void LFO<sampleType>::reset()
 {
-    frequency = 5, level = 0.5, currentAngle = 0;
+    frequency = 5, currentAngle = 0;
 }
+
+template class LFO<float>;
+template class LFO<double>;

@@ -21,6 +21,7 @@ class SynthVoice : public juce::SynthesiserVoice
 {
 public:
     
+    SynthVoice();
 
     bool canPlaySound (juce::SynthesiserSound* sound) override;
     
@@ -46,15 +47,18 @@ public:
 private:
     float level=0.5f;
     int channel=0;
-    float frequency;
-    int noteMidiNumber;
-    float currentAngle;
-    float angleIncrement;
-    float tailOff;
+    float frequency=0;
+    int noteMidiNumber=0;
+    float currentAngle=0;
+    float angleIncrement=0;
+    float tailOff=0;
     bool isPlaying = false;
-    LFO lfo;
-    AllPassFilter AP[4];
-    Phaser<float> phaser;
+    juce::dsp::ProcessSpec spec;
+    
+
+    LFO<float> lfo;
+    AllPassFilter<float> AP[4];
+    Phaser<float> phaser[2];
 
     juce::ADSR adsr;
     juce::ADSR::Parameters adsrParameters;

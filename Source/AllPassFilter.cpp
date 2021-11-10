@@ -9,22 +9,25 @@
 */
 
 #include "AllPassFilter.h"
-
-AllPassFilter::AllPassFilter()   
-{
-
-}
-AllPassFilter::~AllPassFilter()
+template<typename sampleType>
+AllPassFilter<sampleType>::AllPassFilter()   
 {
 
 }
 
-double AllPassFilter::calcOutput(double x)
+template<typename sampleType>
+AllPassFilter<sampleType>::~AllPassFilter()
+{
+
+}
+
+template<typename sampleType>
+sampleType AllPassFilter<sampleType>::calcOutput(sampleType x)
 {
     
-    double output;
-    double theta = juce::MathConstants<double>::pi * fc / sampleRate; //twoPi or pi?
-    double cosTheta = std::cos(theta);
+    sampleType output;
+    sampleType theta = juce::MathConstants<sampleType>::pi * fc / sampleRate; //twoPi or pi?
+    sampleType cosTheta = std::cos(theta);
     output = R * R * x - 2 * R * cosTheta * delay1X + delay2X - R * R * delay2Y+ 2 * R* cosTheta*delay1Y;
     delay2Y = delay1Y;
     delay1Y = output;
@@ -33,16 +36,25 @@ double AllPassFilter::calcOutput(double x)
     //DBG(output);
     return output;
 }
-void AllPassFilter::setCutoffFrequency(double myfc)
+
+template<typename sampleType>
+void AllPassFilter<sampleType>::setCutoffFrequency(sampleType myfc)
 {
     fc = myfc;
 }
-void AllPassFilter::setR(double myR)
+
+template<typename sampleType>
+void AllPassFilter<sampleType>::setR(sampleType myR)
 {
     R = myR;
 }
-void AllPassFilter::reset()
+
+template<typename sampleType>
+void AllPassFilter<sampleType>::reset()
 {
     delay1X = 0, delay2X = 0, delay1Y = 0, delay2Y = 0;
-    R = 0.8;
+    R = 0.5;
 }
+
+template class AllPassFilter<float>;
+template class AllPassFilter<double>;
