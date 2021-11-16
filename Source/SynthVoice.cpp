@@ -39,6 +39,8 @@ void SynthVoice::startNote (int midiNoteNumber, float velocity, juce::Synthesise
     lfo.setSampleRate(getSampleRate());
     
     lfo.setWaveForm(LFO<float>::Wave::sine);
+    phaser[0].setMix(0);
+    phaser[1].setMix(1);
     //phaser[0].setLFOwave(LFO<float>::Wave::square);
     //DBG(getSampleRate());
     //DBG(frequency);
@@ -116,7 +118,7 @@ void SynthVoice::renderNextBlock (juce::AudioBuffer <float> &outputBuffer, int s
         juce::dsp::ProcessContextReplacing<float> rightChannel(block.getSingleChannelBlock(1));
 
         /*Go through Phaser*/
-        //phaser[0].process(leftChannel);
+        phaser[0].process(leftChannel);
         phaser[1].process(rightChannel);
         
     }

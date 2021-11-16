@@ -6,6 +6,17 @@
               bundleIdentifier="FXs" aaxIdentifier="FXs">
   <MAINGROUP id="mVZWiJ" name="FXs_Project">
     <GROUP id="{6F78ACCE-B962-0425-4434-F705796C6EAB}" name="Source">
+      <FILE id="YqdnfK" name="AweLookAndFeel_v1.h" compile="0" resource="0"
+            file="Source/AweLookAndFeel_v1.h"/>
+      <FILE id="gPHNqY" name="FIFO.h" compile="0" resource="0" file="Source/FIFO.h"/>
+      <FILE id="bysEga" name="Oscilloscope.cpp" compile="1" resource="0"
+            file="Source/Oscilloscope.cpp"/>
+      <FILE id="tfpmCI" name="Oscilloscope.h" compile="0" resource="0" file="Source/Oscilloscope.h"/>
+      <FILE id="y62NtF" name="SliderHandler.cpp" compile="1" resource="0"
+            file="Source/SliderHandler.cpp"/>
+      <FILE id="GomNsy" name="SliderHandler.h" compile="0" resource="0" file="Source/SliderHandler.h"/>
+      <FILE id="hSVtN8" name="Spectrum.cpp" compile="1" resource="0" file="Source/Spectrum.cpp"/>
+      <FILE id="lX3OGv" name="Spectrum.h" compile="0" resource="0" file="Source/Spectrum.h"/>
       <FILE id="lJRmoF" name="SynthSound.h" compile="0" resource="0" file="Source/SynthSound.h"/>
       <FILE id="mrHbWH" name="SynthVoice.cpp" compile="1" resource="0" file="Source/SynthVoice.cpp"/>
       <FILE id="ast2uA" name="SynthVoice.h" compile="0" resource="0" file="Source/SynthVoice.h"/>

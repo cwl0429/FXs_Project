@@ -11,7 +11,7 @@
 #include <JuceHeader.h>
 #include "SynthSound.h"
 #include "SynthVoice.h"
-
+#include "FIFO.h"
 //==============================================================================
 /**
 */
@@ -38,7 +38,7 @@ public:
 
     //==============================================================================
     const juce::String getName() const override;
-
+    std::unique_ptr<juce::AudioParameterFloat> SliderParameter(char* id, char* name, float max = 2, float min = 0, float init = 0.1f, float step = 0.02);
     bool acceptsMidi() const override;
     bool producesMidi() const override;
     bool isMidiEffect() const override;
@@ -54,10 +54,15 @@ public:
     //==============================================================================
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
-
+    SingleChannelSampleFifo<juce::AudioBuffer<float>>& getSingleChannelSampleFifo() { return singleChannelSampleFifo; }
+    juce::AudioProcessorValueTreeState tree;
 private:
     //==============================================================================
     juce::Synthesiser mySynth;
+    
+
+    SingleChannelSampleFifo<juce::AudioBuffer<float>> singleChannelSampleFifo{ 0 };  //queue for waveform
+    double lastSampleRate;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FXs_ProjectAudioProcessor)
 
 

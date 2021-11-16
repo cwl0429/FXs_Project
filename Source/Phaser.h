@@ -77,7 +77,7 @@ public:
             {
 
                 for (int j = 0; j < numStages; ++j)
-                    filters[j]->setCutoffFrequency(frequency[k] * 10000);
+                    filters[j]->setCutoffFrequency(frequency[k] * 4000);
 
                 k++;
             }

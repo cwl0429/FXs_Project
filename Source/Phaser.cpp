@@ -37,14 +37,15 @@ void Phaser<sampleType>::setSpec(juce::dsp::ProcessSpec spec)
     specDown.maximumBlockSize = specDown.maximumBlockSize / (int)maxUpdateCounter + 1;
     bufferFrequency.setSize(1, (int)specDown.maximumBlockSize, false, false, true);
     
-    lfo.setWaveForm(LFO<sampleType>::Wave::triangle);
-
+    lfo.setWaveForm(LFO<sampleType>::Wave::sine);
+    
 }
 
 template <typename sampleType>
 void Phaser<sampleType>::setCentreFrequency(sampleType newCentreHz)
 {
     centreFrequency = newCentreHz;
+    
 }
 
 template <typename sampleType>

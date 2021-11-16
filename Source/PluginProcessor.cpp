@@ -9,6 +9,7 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
+
 //==============================================================================
 FXs_ProjectAudioProcessor::FXs_ProjectAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -19,7 +20,16 @@ FXs_ProjectAudioProcessor::FXs_ProjectAudioProcessor()
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ), tree(*this, nullptr, "PARAM",
+                           {
+                           SliderParameter("level","Level"),
+                           SliderParameter("attack","Attack"),
+                           SliderParameter("decay","Decay"),
+                           SliderParameter("sustain","Sustain"),
+                           SliderParameter("release","Release"),
+                           std::make_unique<juce::AudioParameterChoice>("wave",
+                               "Wave",
+                               juce::StringArray({ "Sine","Square","Sawtooth","Triangle" }),1) })
 #endif
 {
     mySynth.clearSounds();
@@ -37,6 +47,17 @@ FXs_ProjectAudioProcessor::~FXs_ProjectAudioProcessor()
 }
 
 //==============================================================================
+
+std::unique_ptr<juce::AudioParameterFloat> FXs_ProjectAudioProcessor::SliderParameter(char* id, char* name, float max, float min, float init, float step) {
+    return std::make_unique<juce::AudioParameterFloat>(id,
+        name,
+        juce::NormalisableRange<float>(min, max, step), init,
+        juce::String(),
+        juce::AudioProcessorParameter::genericParameter,
+        [](float value, int) {return juce::String(value); },
+        [](juce::String text) { return text.getFloatValue(); });
+}
+
 const juce::String FXs_ProjectAudioProcessor::getName() const
 {
     return JucePlugin_Name;

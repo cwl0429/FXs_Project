@@ -10,6 +10,9 @@
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
+#include "SliderHandler.h"
+#include "Oscilloscope.h"
+#include "Spectrum.h"
 
 //==============================================================================
 /**
@@ -29,5 +32,12 @@ private:
     // access the processor object that created it.
     FXs_ProjectAudioProcessor& audioProcessor;
 
+    juce::ComboBox synthChoose;
+    SliderHandler sliderSet;
+    Oscilloscope oscilloscope;
+    Spectrum spectrum;
+
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> waveComboBoxAttachment;
+    std::vector<juce::Component*> subComponents{ &oscilloscope, &sliderSet ,&spectrum };
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FXs_ProjectAudioProcessorEditor)
 };
