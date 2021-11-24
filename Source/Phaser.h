@@ -18,13 +18,13 @@ class Phaser
 public:
     Phaser();
     ~Phaser();
-    void setRate(sampleType newRateHz);
+    void setRate(sampleType newRateHz);// lfo frequency
     void setDepth(sampleType newDepth);
     void setCentreFrequency(sampleType newCentreHz);
     void setMix(sampleType newMix);
     //void setLFOwave(LFO<sampleType>::Wave newWave);
     void reset();
-    void update();
+    void update(sampleType newRateHz, sampleType newDepth, sampleType newCentreHz, sampleType newMix);
     void setSpec(juce::dsp::ProcessSpec spec);
 
     void process(juce::dsp::ProcessContextReplacing<sampleType>& context) noexcept
@@ -77,7 +77,10 @@ public:
             {
 
                 for (int j = 0; j < numStages; ++j)
-                    filters[j]->setCutoffFrequency(frequency[k] * 4000);
+                    filters[j]->setCutoffFrequency(frequency[k] * 1000);
+
+                for (int j = 0; j < numStages; ++j)
+                    filters[j]->setR(frequency[k] * 0.2 + normCentreFrequency);
 
                 k++;
             }
@@ -108,7 +111,7 @@ private:
     sampleType sampleRate = 44100.0;
 
     sampleType centreFrequency = 1300.0;
-    sampleType normCentreFrequency = 0.5;
+    sampleType normCentreFrequency = 0.8;
     sampleType rate=1.0, depth=0.5, mix=0.5;
     sampleType lastOutput=0;
     sampleType feedBackVolume = 0.05;

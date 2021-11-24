@@ -15,6 +15,7 @@ LFO<sampleType>::LFO() :waveType(Wave::sine)
 {
     sampleType theta;
     sampleType sine;
+    sampleType slope;
 
     /*sine and square build*/
 
@@ -27,15 +28,19 @@ LFO<sampleType>::LFO() :waveType(Wave::sine)
     }
 
     /*triangle build*/
-    
-    for (int i = 0; i < 44100; ++i)
+
+    triangleWave[0] = 0;
+    slope = 0.0000907; //slope =  1/11025
+    for (int i = 1; i < 44100; ++i)
     {
-        sampleType slope = 1 / 11025;
+        
         
         
         if (i < 11025)
         {
-            triangleWave[i] = i * slope;
+            
+            triangleWave[i] = triangleWave[i-1] + slope;
+            //DBG(triangleWave[i]);
         }
         else if (i < 33075)
         {
@@ -49,18 +54,21 @@ LFO<sampleType>::LFO() :waveType(Wave::sine)
     }
 
     /*sawtooth build*/
-
-    for (int i = 0; i < 44100; ++i)
+    
+    sawtoothWave[0] = 0;
+    slope = 0.0000453; // slope = 1 / 22050
+    for (int i = 1; i < 44100; ++i)
     {
-        sampleType slope = 1 / 22050;
+        
 
         if (i < 22050)
         {
-            sawtoothWave[i] = i * slope;
+            
+            sawtoothWave[i] = sawtoothWave[i-1] + slope;
         }
         else
         {
-            sawtoothWave[i] = -1 + i * slope;
+            sawtoothWave[i] = -sawtoothWave[i - 1] + slope;
         }
     }
     
@@ -103,11 +111,11 @@ sampleType LFO<sampleType>::getCurrentValue()
 {
     sampleType* output;
     int index;
-    currentAngle += frequency / sampleRate;
+    currentAngle += (frequency / sampleRate);
     if (currentAngle >= 1)
         currentAngle -= 1;
 
-  
+    
     switch (waveType)
     {
         case Wave::sine:
@@ -126,9 +134,10 @@ sampleType LFO<sampleType>::getCurrentValue()
             output = squareWave;
             break;
     }
+    
     index = std::floor(currentAngle * 44100) ;
     
-    return output[index];
+    return *(output+index);
 }
 
 template<typename sampleType>

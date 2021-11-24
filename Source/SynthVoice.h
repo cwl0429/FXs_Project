@@ -35,12 +35,9 @@ public:
    
     void renderNextBlock (juce::AudioBuffer <float> &outputBuffer, int startSample, int numSamples) override;
     
-    void setLevel(float newLevel);
-
     void setChannel(int newChannel);
 
-    void setADSR(float attack, float decay, float sustain, float release);
-
+    void setParam(float newLevel,float newRate, float newDepth, float newCutoff, float newMix);
     
 
     

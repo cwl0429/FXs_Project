@@ -2,8 +2,8 @@
 
 <JUCERPROJECT id="u15eJh" name="FXs_Project" projectType="audioplug" useAppConfig="0"
               addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1"
-              pluginFormats="buildVST3" pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn"
-              bundleIdentifier="FXs" aaxIdentifier="FXs">
+              pluginFormats="buildVST3" bundleIdentifier="FXs" aaxIdentifier="FXs"
+              pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn">
   <MAINGROUP id="mVZWiJ" name="FXs_Project">
     <GROUP id="{6F78ACCE-B962-0425-4434-F705796C6EAB}" name="Source">
       <FILE id="YqdnfK" name="AweLookAndFeel_v1.h" compile="0" resource="0"

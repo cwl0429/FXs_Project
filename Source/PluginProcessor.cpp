@@ -21,16 +21,16 @@ FXs_ProjectAudioProcessor::FXs_ProjectAudioProcessor()
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
                        ), tree(*this, nullptr, "PARAM",
-                           {
+                           {/*TO DO*/
                            SliderParameter("level","Level"),
-                           SliderParameter("attack","Attack"),
-                           SliderParameter("decay","Decay"),
-                           SliderParameter("sustain","Sustain"),
-                           SliderParameter("release","Release"),
+                           SliderParameter("rate","Rate"),
+                           SliderParameter("depth","Depth"),
+                           SliderParameter("cutoff","Cutoff"),
+                           SliderParameter("mix","Mix",1,0,0.5,0.1),
                            std::make_unique<juce::AudioParameterChoice>("wave",
                                "Wave",
                                juce::StringArray({ "Sine","Square","Sawtooth","Triangle" }),1) })
-#endif
+#endif 
 {
     mySynth.clearSounds();
     mySynth.addSound(new SynthSound());
@@ -122,9 +122,11 @@ void FXs_ProjectAudioProcessor::changeProgramName (int index, const juce::String
 //==============================================================================
 void FXs_ProjectAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    // Use this method as the place to do any pre-playback
-    // initialisation that you need..
+    lastSampleRate = sampleRate;
+
     mySynth.setCurrentPlaybackSampleRate(sampleRate);
+    singleChannelSampleFifo.prepare(samplesPerBlock);
+
 }
 
 void FXs_ProjectAudioProcessor::releaseResources()
@@ -165,28 +167,27 @@ void FXs_ProjectAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
-    // In case we have more outputs than inputs, this code clears any output
-    // channels that didn't contain input data, (because these aren't
-    // guaranteed to be empty - they may contain garbage).
-    // This is here to avoid people getting screaming feedback
-    // when they first compile a plugin, but obviously you don't need to keep
-    // this code if your algorithm always overwrites all the output channels.
+    
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
-    // This is the place where you'd normally do the guts of your plugin's
-    // audio processing...
-    // Make sure to reset the state if your inner loop is processing
-    // the samples and the outer loop is handling the channels.
-    // Alternatively, you can process the samples with the channels
-    // interleaved by keeping the same state.
+   
     for (int i = 0; i < mySynth.getNumVoices(); i++)
     {
         auto* myVoice = dynamic_cast<SynthVoice*>(mySynth.getVoice(i));
+        myVoice->setParam(
+            tree.getRawParameterValue("level")->load(),
+            tree.getRawParameterValue("rate")->load(),
+            tree.getRawParameterValue("depth")->load(),
+            tree.getRawParameterValue("cutoff")->load(),
+            tree.getRawParameterValue("mix")->load()
+           
+        );
         
     }
     mySynth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
-    
+    singleChannelSampleFifo.update(buffer);
+
     
 }
 

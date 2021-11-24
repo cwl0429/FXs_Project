@@ -33,7 +33,7 @@ public:
     sampleType getCurrentValue();
 
 private:
-    sampleType sampleRate = 44100.0;
+    sampleType sampleRate = 44100;
     sampleType frequency = 1, currentAngle = 0;
 
     sampleType sineWave[44100];

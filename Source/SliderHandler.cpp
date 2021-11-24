@@ -53,10 +53,10 @@ void RotarySliderWithLabel::resized()
 SliderHandler::SliderHandler(FXs_ProjectAudioProcessor& p) :
     processor(p),
     levelSlider(p,"Level",""),
-    a_Slider(p,"Attack",""),
-    d_Slider(p,"Decay", ""),
-    s_Slider(p,"Sustain", ""),
-    r_Slider(p,"Release", "")
+    a_Slider(p,"Rate",""),
+    d_Slider(p,"Depth", ""),
+    s_Slider(p,"Cutoff", ""),
+    r_Slider(p,"Mix", "")
 {
     for (auto& slider : sliders)
     {

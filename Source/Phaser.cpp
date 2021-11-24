@@ -16,6 +16,7 @@ Phaser<sampleType>::Phaser()
     for (auto n = 0; n < numStages; ++n)
     {
         filters.add(new AllPassFilter<sampleType>());
+        filters.getUnchecked(n)->setCutoffFrequency(1000 * (n + 1));
         
     }
     dryWet.setMixingRule(juce::dsp::DryWetMixingRule::linear);
@@ -51,15 +52,16 @@ void Phaser<sampleType>::setCentreFrequency(sampleType newCentreHz)
 template <typename sampleType>
 void Phaser<sampleType>::setRate(sampleType newRate)
 {
-    lfo.setSampleRate(newRate);
+    lfo.setFrequency(newRate*10);
 }
 
 template <typename sampleType>
 void Phaser<sampleType>::setDepth(sampleType newDepth)
 {
-    /*for (int i = 0; i < numStages; ++i)
-        filters[i].setR(newDepth);*/
     depth = newDepth;
+    for (int i = 0; i < numStages; ++i)
+        filters.getUnchecked(i)->setR(depth);
+    
 }
 
 template <typename sampleType>
@@ -73,6 +75,15 @@ void Phaser<sampleType>::setLFOwave(LFO<sampleType>::Wave newWave)
 {
     lfo.setWaveForm(newWave);
 }*/
+
+template <typename sampleType>
+void Phaser<sampleType>::update(sampleType newRateHz, sampleType newDepth, sampleType newCentreHz, sampleType newMix)
+{
+    /*To DO*/
+    setCentreFrequency(newRateHz);
+    setDepth(newDepth);
+    //set
+}
 
 template <typename sampleType>
 void Phaser<sampleType>::reset()

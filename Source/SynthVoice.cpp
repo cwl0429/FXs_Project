@@ -39,12 +39,11 @@ void SynthVoice::startNote (int midiNoteNumber, float velocity, juce::Synthesise
     lfo.setSampleRate(getSampleRate());
     
     lfo.setWaveForm(LFO<float>::Wave::sine);
-    phaser[0].setMix(0);
-    phaser[1].setMix(1);
-    //phaser[0].setLFOwave(LFO<float>::Wave::square);
-    //DBG(getSampleRate());
-    //DBG(frequency);
-    //DBG(level);
+    
+    //DBG("start");
+    phaser[0].setMix(0.5);
+    phaser[1].setMix(0.5);
+    
 }
 
 void SynthVoice::stopNote (float velocity, bool allowTailOff)
@@ -96,11 +95,9 @@ void SynthVoice::renderNextBlock (juce::AudioBuffer <float> &outputBuffer, int s
             }
       
 
-            level = 0.5f; 
 
-            value = lfo.getCurrentValue() * level*adsrValue;
-            //DBG(value);
-            
+            value = lfo.getCurrentValue() * level;
+
             outputBuffer.addSample(0, i, value);
             outputBuffer.addSample(1, i, value);
             
@@ -111,8 +108,8 @@ void SynthVoice::renderNextBlock (juce::AudioBuffer <float> &outputBuffer, int s
                 currentAngle -= juce::MathConstants<float>::twoPi;
             }
         }
-        juce::dsp::AudioBlock<float> block(outputBuffer);
 
+        juce::dsp::AudioBlock<float> block(outputBuffer);
 
         juce::dsp::ProcessContextReplacing<float> leftChannel(block.getSingleChannelBlock(0));
         juce::dsp::ProcessContextReplacing<float> rightChannel(block.getSingleChannelBlock(1));
@@ -127,20 +124,21 @@ void SynthVoice::renderNextBlock (juce::AudioBuffer <float> &outputBuffer, int s
 
 
 
-void SynthVoice::setLevel(float newLevel)
-{
-    level = newLevel;
-}
 
 void SynthVoice::setChannel(int newChannel)
 {
     channel = newChannel;
 }
 
-void SynthVoice::setADSR(float attack, float decay, float sustain, float release) //unit is second
+void SynthVoice::setParam(float newLevel, float newRate, float newDepth, float newCutoff, float newMix)
 {
-    adsrParameters.attack = attack;
-    adsrParameters.decay = decay;
-    adsrParameters.sustain = sustain;
-    adsrParameters.release = release;
+    level = newLevel;
+    for (int i = 0; i < 2; ++i)
+    {
+        phaser[i].setRate(newRate);
+        phaser[i].setDepth(newDepth);
+        phaser[i].setCentreFrequency(newCutoff);
+        phaser[i].setMix(newMix);
+    }
+    
 }
