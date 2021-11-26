@@ -63,6 +63,9 @@ private:
 
     SingleChannelSampleFifo<juce::AudioBuffer<float>> singleChannelSampleFifo{ 0 };  //queue for waveform
     double lastSampleRate;
+
+    juce::dsp::Phaser<float> phaser;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FXs_ProjectAudioProcessor)
 
 

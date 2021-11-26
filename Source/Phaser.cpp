@@ -52,7 +52,7 @@ void Phaser<sampleType>::setCentreFrequency(sampleType newCentreHz)
 template <typename sampleType>
 void Phaser<sampleType>::setRate(sampleType newRate)
 {
-    lfo.setFrequency(newRate*10);
+    lfo.setFrequency(newRate);
 }
 
 template <typename sampleType>

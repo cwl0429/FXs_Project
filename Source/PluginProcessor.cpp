@@ -22,10 +22,10 @@ FXs_ProjectAudioProcessor::FXs_ProjectAudioProcessor()
                      #endif
                        ), tree(*this, nullptr, "PARAM",
                            {/*TO DO*/
-                           SliderParameter("level","Level"),
-                           SliderParameter("rate","Rate"),
-                           SliderParameter("depth","Depth"),
-                           SliderParameter("cutoff","Cutoff"),
+                           SliderParameter("level","Level",1,0,0.2,0.1),
+                           SliderParameter("rate","Rate",20,1,5,1),
+                           SliderParameter("depth","Depth",1,0,0.8,0.05),
+                           SliderParameter("cutoff","Cutoff",20000,0,1300,100),
                            SliderParameter("mix","Mix",1,0,0.5,0.1),
                            std::make_unique<juce::AudioParameterChoice>("wave",
                                "Wave",
@@ -127,6 +127,14 @@ void FXs_ProjectAudioProcessor::prepareToPlay (double sampleRate, int samplesPer
     mySynth.setCurrentPlaybackSampleRate(sampleRate);
     singleChannelSampleFifo.prepare(samplesPerBlock);
 
+   /* juce::dsp::ProcessSpec spec;
+    spec.maximumBlockSize = samplesPerBlock;
+    spec.numChannels = getMainBusNumOutputChannels();
+    spec.sampleRate = sampleRate;
+
+    phaser.prepare(spec);*/
+
+
 }
 
 void FXs_ProjectAudioProcessor::releaseResources()
@@ -185,7 +193,19 @@ void FXs_ProjectAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
         );
         
     }
+
+    //phaser.setCentreFrequency(2000);
+    //phaser.setDepth(1);
+    //phaser.setFeedback(0.5);
+    //phaser.setRate(5);
+    //phaser.setMix(0.5);
     mySynth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
+    
+    /*auto block = juce::dsp::AudioBlock<float> (buffer);
+    auto context = juce::dsp::ProcessContextReplacing<float> (block);
+    phaser.process(context);*/
+
+
     singleChannelSampleFifo.update(buffer);
 
     
