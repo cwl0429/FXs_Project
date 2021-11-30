@@ -94,11 +94,9 @@ void SynthVoice::renderNextBlock (juce::AudioBuffer <float> &outputBuffer, int s
                 isPlaying = false;
             }
       
-            
-
             value = lfo.getCurrentValue() * level;
 
-           /* for (int i = 0; i < 4; ++i)
+           /*for (int i = 0; i < 4; ++i)
                 value = AP[i].calcOutput(value);*/
 
             outputBuffer.addSample(0, i, value);
