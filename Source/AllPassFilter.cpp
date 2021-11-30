@@ -26,9 +26,9 @@ sampleType AllPassFilter<sampleType>::calcOutput(sampleType x)
 {
     
     sampleType output;
-    sampleType theta = juce::MathConstants<sampleType>::pi * fc / sampleRate; //twoPi or pi?
+    sampleType theta = juce::MathConstants<sampleType>::twoPi * fc / sampleRate; //twoPi or pi?
     sampleType cosTheta = std::cos(theta);
-    output = R * R * x - 2 * R * cosTheta * delay1X + delay2X - R * R * delay2Y+ 2 * R* cosTheta*delay1Y;
+    output = R * R * x - 2 * R * cosTheta * delay1X + delay2X - R * R * delay2Y+ 2 * R * cosTheta * delay1Y;
     delay2Y = delay1Y;
     delay1Y = output;
     delay2X = delay1X;
@@ -47,6 +47,12 @@ template<typename sampleType>
 void AllPassFilter<sampleType>::setR(sampleType myR)
 {
     R = myR;
+}
+
+template<typename sampleType>
+void AllPassFilter<sampleType>::setSampleRate(sampleType mySampleRate)
+{
+    sampleRate = mySampleRate;
 }
 
 template<typename sampleType>

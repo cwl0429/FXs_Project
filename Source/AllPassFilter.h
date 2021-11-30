@@ -27,6 +27,8 @@ public:
 
     void setCutoffFrequency(sampleType myfc);
 
+    void setSampleRate(sampleType mySampleRate);
+
     void reset();
 
 private:

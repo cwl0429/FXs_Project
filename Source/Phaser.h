@@ -77,10 +77,10 @@ public:
             {
                 //centreFrequency = 13000;
                 for (int j = 0; j < numStages; ++j)
-                    filters[j]->setCutoffFrequency(frequency[k] * 6000+ centreFrequency);
+                    filters[j]->setCutoffFrequency(frequency[k] * 1000+ centreFrequency);
 
-               /* for (int j = 0; j < numStages; ++j)
-                    filters[j]->setR(frequency[k] * 0.2 + normCentreFrequency);*/
+                /*for (int j = 0; j < numStages; ++j)
+                    filters[j]->setR(frequency[k] * 0.1 + normCentreFrequency);*/
 
                 k++;
             }
@@ -96,7 +96,7 @@ public:
             //DBG("Wet sample value "<<output);
         }
             
-        DBG(centreFrequency);
+        //DBG(centreFrequency);
     
         dryWet.mixWetSamples(outputBlock);
         

@@ -16,7 +16,7 @@ Phaser<sampleType>::Phaser()
     for (auto n = 0; n < numStages; ++n)
     {
         filters.add(new AllPassFilter<sampleType>());
-        filters.getUnchecked(n)->setCutoffFrequency(1000 * (n + 1));
+        //filters.getUnchecked(n)->setCutoffFrequency(1000 * (n + 1));
         
     }
     dryWet.setMixingRule(juce::dsp::DryWetMixingRule::linear);
@@ -39,6 +39,11 @@ void Phaser<sampleType>::setSpec(juce::dsp::ProcessSpec spec)
     bufferFrequency.setSize(1, (int)specDown.maximumBlockSize, false, false, true);
     
     lfo.setWaveForm(LFO<sampleType>::Wave::sine);
+
+    /*get correct sampleRate eg.48000 or 44100*/
+    lfo.setSampleRate(spec.sampleRate);
+    for (auto n = 0; n < numStages; ++n)
+        filters.getUnchecked(n)->setSampleRate(spec.sampleRate);
     
 }
 
@@ -52,7 +57,7 @@ void Phaser<sampleType>::setCentreFrequency(sampleType newCentreHz)
 template <typename sampleType>
 void Phaser<sampleType>::setRate(sampleType newRate)
 {
-    lfo.setFrequency(newRate);
+    lfo.setFrequency(4*newRate);
 }
 
 template <typename sampleType>

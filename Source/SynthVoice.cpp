@@ -37,12 +37,9 @@ void SynthVoice::startNote (int midiNoteNumber, float velocity, juce::Synthesise
 
     lfo.setFrequency(frequency);
     lfo.setSampleRate(getSampleRate());
+    DBG("SampleRate:"<<getSampleRate());
+    lfo.setWaveForm(LFO<float>::Wave::square );
     
-    lfo.setWaveForm(LFO<float>::Wave::sine );
-    
-    //DBG("start");
-    phaser[0].setMix(0.5);
-    phaser[1].setMix(0.5);
     
 }
 

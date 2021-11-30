@@ -65,7 +65,7 @@ void FXs_ProjectAudioProcessorEditor::resized()
     juce::FlexBox bottomFlexBlox;
     bottomFlexBlox.flexDirection = juce::FlexBox::Direction::row;
     bottomFlexBlox.items.add(juce::FlexItem(sliderSet).withFlex(5.0f));
-    bottomFlexBlox.items.add(juce::FlexItem(synthChoose).withFlex(1.0f));
+    //bottomFlexBlox.items.add(juce::FlexItem(synthChoose).withFlex(1.0f));
 
     juce::FlexBox flexBox;
     flexBox.flexDirection = juce::FlexBox::Direction::column;

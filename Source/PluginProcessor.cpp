@@ -24,7 +24,7 @@ FXs_ProjectAudioProcessor::FXs_ProjectAudioProcessor()
                            {/*TO DO*/
                            SliderParameter("level","Level",1,0,0.2,0.1),
                            SliderParameter("rate","Rate",20,1,5,1),
-                           SliderParameter("depth","Depth",1,0,0.8,0.05),
+                           SliderParameter("depth","Depth",0.99,0.01,0.8,0.01),
                            SliderParameter("cutoff","Cutoff",20000,0,1300,100),
                            SliderParameter("mix","Mix",1,0,0.5,0.1),
                            std::make_unique<juce::AudioParameterChoice>("wave",
