@@ -22,7 +22,7 @@ FXs_ProjectAudioProcessor::FXs_ProjectAudioProcessor()
                      #endif
                        ), tree(*this, nullptr, "PARAM",
                            {/*TO DO*/
-                           SliderParameter("level","Level",1,0,0.2,0.1),
+                           SliderParameter("feedback","Feedback",1,-1,0.1,0.05),
                            SliderParameter("rate","Rate",20,1,5,1),
                            SliderParameter("depth","Depth",0.99,0.01,0.8,0.01),
                            SliderParameter("cutoff","Cutoff",20000,0,1300,100),
@@ -201,7 +201,7 @@ void FXs_ProjectAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
         phaser[i].setDepth(tree.getRawParameterValue("depth")->load());
         phaser[i].setCentreFrequency(tree.getRawParameterValue("cutoff")->load());
         phaser[i].setMix(tree.getRawParameterValue("mix")->load());
-        
+        phaser[i].setFeedback(tree.getRawParameterValue("feedback")->load());
     }
 
     /*phaser.setCentreFrequency(2000);

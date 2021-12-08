@@ -13,15 +13,16 @@
 
 RotarySliderWithLabel::RotarySliderWithLabel(FXs_ProjectAudioProcessor& audioProcessor, juce::String titleName,juce::String unit) :
     processor(audioProcessor)
-{
-    //setLookAndFeel(&lnf);
+{   
+    setLookAndFeel(&lnf);
+    
     slider.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalDrag);
     slider.setTextBoxStyle(juce::Slider::TextBoxBelow,
         true,
         slider.getTextBoxWidth() - 30,
         slider.getTextBoxHeight());
     
-    //slider.setRange(upperBound,lowerBound);
+    
     attachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(processor.tree, juce::String{ titleName }.toLowerCase(), slider);
     title.setText(titleName, juce::dontSendNotification);
     title.setJustificationType(juce::Justification::centred);
@@ -29,10 +30,10 @@ RotarySliderWithLabel::RotarySliderWithLabel(FXs_ProjectAudioProcessor& audioPro
     addAndMakeVisible(slider);
 }
 
-/*RotarySliderWithLabel::~RotarySliderWithLabel()
+RotarySliderWithLabel::~RotarySliderWithLabel()
 {
-
-}*/
+    setLookAndFeel(nullptr);
+}
 
 void RotarySliderWithLabel::paint(juce::Graphics& g)
 {
@@ -52,14 +53,15 @@ void RotarySliderWithLabel::resized()
 
 SliderHandler::SliderHandler(FXs_ProjectAudioProcessor& p) :
     processor(p),
-    levelSlider(p,"Level",""),
-    a_Slider(p,"Rate",""),
-    d_Slider(p,"Depth", ""),
-    s_Slider(p,"Cutoff", ""),
-    r_Slider(p,"Mix", "")
+    feedback_Slider(p,"Feedback",""),
+    rate_Slider(p,"Rate","hz"),
+    depth_Slider(p,"Depth", ""),
+    cutoff_Slider(p,"Cutoff", "hz"),
+    mix_Slider(p,"Mix", "")
 {
     for (auto& slider : sliders)
     {
+        
         addAndMakeVisible(slider);
     }
 }

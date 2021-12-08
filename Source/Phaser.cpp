@@ -75,6 +75,12 @@ void Phaser<sampleType>::setMix(sampleType newMix)
     dryWet.setWetMixProportion(newMix);
 }
 
+template <typename sampleType>
+void Phaser<sampleType>::setFeedback(sampleType newFeedBack)
+{
+    feedBackVolume = newFeedBack;
+}
+
 /*template <typename sampleType>
 void Phaser<sampleType>::setLFOwave(LFO<sampleType>::Wave newWave)
 {

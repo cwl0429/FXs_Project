@@ -32,12 +32,10 @@ private:
     // access the processor object that created it.
     FXs_ProjectAudioProcessor& audioProcessor;
 
-    juce::ComboBox synthChoose;
     SliderHandler sliderSet;
-    Oscilloscope oscilloscope;
-    Spectrum spectrum;
+
 
     std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> waveComboBoxAttachment;
-    std::vector<juce::Component*> subComponents{ &oscilloscope, &sliderSet ,&spectrum };
+    std::vector<juce::Component*> subComponents{ &sliderSet  };
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FXs_ProjectAudioProcessorEditor)
 };

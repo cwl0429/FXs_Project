@@ -22,7 +22,7 @@ public:
     void setDepth(sampleType newDepth);
     void setCentreFrequency(sampleType newCentreHz);
     void setMix(sampleType newMix);
-    //void setLFOwave(LFO<sampleType>::Wave newWave);
+    void setFeedback(sampleType newFeedback);
     void reset();
     void update(sampleType newRateHz, sampleType newDepth, sampleType newCentreHz, sampleType newMix);
     void setSpec(juce::dsp::ProcessSpec &spec);
@@ -72,15 +72,15 @@ public:
 
             auto input = inputSamples[i];
             auto output = input - lastOutput;
-            //DBG("Dry sample value " << input);
+            
             if (counter == 0)
             {
-                //centreFrequency = 13000;
+                
                 for (int j = 0; j < numStages; ++j)
                     filters[j]->setCutoffFrequency(frequency[k] * 2000+ centreFrequency);
 
-                for (int j = 0; j < numStages; ++j)
-                    filters[j]->setR(frequency[k] * 0.1 + normCentreFrequency);
+                /*for (int j = 0; j < numStages; ++j)
+                    filters[j]->setR(frequency[k] * 0.1 + normCentreFrequency);*/
 
                 k++;
             }
@@ -93,10 +93,10 @@ public:
             counter++;
             if (counter == maxUpdateCounter)
                 counter = 0;
-            //DBG("Wet sample value "<<output);
+            
         }
             
-        //DBG(centreFrequency);
+        
     
         dryWet.mixWetSamples(outputBlock);
         
