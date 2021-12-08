@@ -9,9 +9,11 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "SynthSound.h"
-#include "SynthVoice.h"
+//#include "SynthSound.h"
+//#include "SynthVoice.h"
 #include "FIFO.h"
+#include "Phaser.h"
+
 //==============================================================================
 /**
 */
@@ -59,12 +61,13 @@ public:
 private:
     //==============================================================================
     juce::Synthesiser mySynth;
-    
-
+    Phaser<float> phaser[2];
+    //juce::dsp::Phaser<float> phaser;
+    juce::dsp::ProcessSpec spec;
     SingleChannelSampleFifo<juce::AudioBuffer<float>> singleChannelSampleFifo{ 0 };  //queue for waveform
     double lastSampleRate;
 
-    juce::dsp::Phaser<float> phaser;
+    
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FXs_ProjectAudioProcessor)
 

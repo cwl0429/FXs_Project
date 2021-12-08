@@ -25,7 +25,7 @@ public:
     //void setLFOwave(LFO<sampleType>::Wave newWave);
     void reset();
     void update(sampleType newRateHz, sampleType newDepth, sampleType newCentreHz, sampleType newMix);
-    void setSpec(juce::dsp::ProcessSpec spec);
+    void setSpec(juce::dsp::ProcessSpec &spec);
 
     void process(juce::dsp::ProcessContextReplacing<sampleType>& context) noexcept
     {
@@ -77,10 +77,10 @@ public:
             {
                 //centreFrequency = 13000;
                 for (int j = 0; j < numStages; ++j)
-                    filters[j]->setCutoffFrequency(frequency[k] * 1000+ centreFrequency);
+                    filters[j]->setCutoffFrequency(frequency[k] * 2000+ centreFrequency);
 
-                /*for (int j = 0; j < numStages; ++j)
-                    filters[j]->setR(frequency[k] * 0.1 + normCentreFrequency);*/
+                for (int j = 0; j < numStages; ++j)
+                    filters[j]->setR(frequency[k] * 0.1 + normCentreFrequency);
 
                 k++;
             }

@@ -29,7 +29,7 @@ Phaser<sampleType>::~Phaser()
 }
 
 template <typename sampleType>
-void Phaser<sampleType>::setSpec(juce::dsp::ProcessSpec spec)
+void Phaser<sampleType>::setSpec(juce::dsp::ProcessSpec &spec)
 {
     /*To Do*/
     dryWet.prepare(spec);

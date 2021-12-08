@@ -32,14 +32,15 @@ FXs_ProjectAudioProcessor::FXs_ProjectAudioProcessor()
                                juce::StringArray({ "Sine","Square","Sawtooth","Triangle" }),1) })
 #endif 
 {
-    mySynth.clearSounds();
+
+    /*mySynth.clearSounds();
     mySynth.addSound(new SynthSound());
 
     mySynth.clearVoices();
     for (int i = 0; i < 5; i++)
     {
         mySynth.addVoice(new SynthVoice());
-    }
+    }*/
 }
 
 FXs_ProjectAudioProcessor::~FXs_ProjectAudioProcessor()
@@ -127,12 +128,16 @@ void FXs_ProjectAudioProcessor::prepareToPlay (double sampleRate, int samplesPer
     mySynth.setCurrentPlaybackSampleRate(sampleRate);
     singleChannelSampleFifo.prepare(samplesPerBlock);
 
-   /* juce::dsp::ProcessSpec spec;
+    /*Spec Setting*/
+    
     spec.maximumBlockSize = samplesPerBlock;
     spec.numChannels = getMainBusNumOutputChannels();
     spec.sampleRate = sampleRate;
 
-    phaser.prepare(spec);*/
+    phaser[0].setSpec(spec);
+    phaser[1].setSpec(spec);
+
+    //phaser.prepare(spec);
 
 
 }
@@ -180,9 +185,10 @@ void FXs_ProjectAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
         buffer.clear (i, 0, buffer.getNumSamples());
 
    
-    for (int i = 0; i < mySynth.getNumVoices(); i++)
+    for (int i = 0; i < getMainBusNumOutputChannels(); i++)
     {
-        auto* myVoice = dynamic_cast<SynthVoice*>(mySynth.getVoice(i));
+        /*For midi input*/
+        /*auto* myVoice = dynamic_cast<SynthVoice*>(mySynth.getVoice(i));
         myVoice->setParam(
             tree.getRawParameterValue("level")->load(),
             tree.getRawParameterValue("rate")->load(),
@@ -190,20 +196,31 @@ void FXs_ProjectAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
             tree.getRawParameterValue("cutoff")->load(),
             tree.getRawParameterValue("mix")->load()
            
-        );
+        );*/
+        phaser[i].setRate(tree.getRawParameterValue("rate")->load());
+        phaser[i].setDepth(tree.getRawParameterValue("depth")->load());
+        phaser[i].setCentreFrequency(tree.getRawParameterValue("cutoff")->load());
+        phaser[i].setMix(tree.getRawParameterValue("mix")->load());
         
     }
 
-    //phaser.setCentreFrequency(2000);
-    //phaser.setDepth(1);
-    //phaser.setFeedback(0.5);
-    //phaser.setRate(5);
-    //phaser.setMix(0.5);
-    mySynth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
+    /*phaser.setCentreFrequency(2000);
+    phaser.setDepth(1);
+    phaser.setFeedback(0.5);
+    phaser.setRate(5);
+    phaser.setMix(0.5);*/
+    //mySynth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
     
-    /*auto block = juce::dsp::AudioBlock<float> (buffer);
-    auto context = juce::dsp::ProcessContextReplacing<float> (block);
-    phaser.process(context);*/
+    auto block = juce::dsp::AudioBlock<float> (buffer);
+
+    auto leftChannel= juce::dsp::ProcessContextReplacing<float>(block.getSingleChannelBlock(0));
+    auto rightChannel = juce::dsp::ProcessContextReplacing<float> (block.getSingleChannelBlock(1));
+
+    //auto context = juce::dsp::ProcessContextReplacing<float>(block);
+
+    phaser[0].process(leftChannel);
+    phaser[1].process(rightChannel);
+    //phaser.process(context);
 
 
     singleChannelSampleFifo.update(buffer);
@@ -225,9 +242,6 @@ juce::AudioProcessorEditor* FXs_ProjectAudioProcessor::createEditor()
 //==============================================================================
 void FXs_ProjectAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
-    // You should use this method to store your parameters in the memory block.
-    // You could do that either as raw data, or use the XML or ValueTree classes
-    // as intermediaries to make it easy to save and load complex data.
 }
 
 void FXs_ProjectAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
