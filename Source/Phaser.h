@@ -12,22 +12,22 @@
 #include "LFO.h"
 
 
-template<typename sampleType>
+template<typename SampleType>
 class Phaser 
 {
 public:
     Phaser();
     ~Phaser();
-    void setRate(sampleType newRateHz);// lfo frequency
-    void setDepth(sampleType newDepth);
-    void setCentreFrequency(sampleType newCentreHz);
-    void setMix(sampleType newMix);
-    void setFeedback(sampleType newFeedback);
+    void setRate(SampleType newRateHz);// lfo frequency
+    void setDepth(SampleType newDepth);
+    void setCentreFrequency(SampleType newCentreHz);
+    void setMix(SampleType newMix);
+    void setFeedback(SampleType newFeedback);
     void reset();
-    void update(sampleType newRateHz, sampleType newDepth, sampleType newCentreHz, sampleType newMix);
+    void update(SampleType newRateHz, SampleType newDepth, SampleType newCentreHz, SampleType newMix);
     void setSpec(juce::dsp::ProcessSpec &spec);
 
-    void process(juce::dsp::ProcessContextReplacing<sampleType>& context) noexcept
+    void process(juce::dsp::ProcessContextReplacing<SampleType>& context) noexcept
     {
        
        
@@ -103,18 +103,18 @@ public:
     }
 
 private:
-    juce::OwnedArray<AllPassFilter<sampleType>> filters;
-    juce::dsp::DryWetMixer<sampleType> dryWet;
-    LFO<sampleType> lfo;
-    juce::AudioBuffer<sampleType> bufferFrequency;
+    juce::OwnedArray<AllPassFilter<SampleType>> filters;
+    juce::dsp::DryWetMixer<SampleType> dryWet;
+    LFO<SampleType> lfo;
+    juce::AudioBuffer<SampleType> bufferFrequency;
 
-    sampleType sampleRate = 44100.0;
+    SampleType sampleRate = 44100.0;
 
-    sampleType centreFrequency = 1300.0;
-    sampleType normCentreFrequency = 0.8;
-    sampleType rate=1.0, depth=0.5, mix=0.5;
-    sampleType lastOutput=0;
-    sampleType feedBackVolume = 0.05;
+    SampleType centreFrequency = 1300.0;
+    SampleType normCentreFrequency = 0.8;
+    SampleType rate=1.0, depth=0.5, mix=0.5;
+    SampleType lastOutput=0;
+    SampleType feedBackVolume = 0.05;
 
     int updateCounter = 0;
     const int maxUpdateCounter = 4;

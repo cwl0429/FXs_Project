@@ -9,25 +9,25 @@
 */
 
 #include "AllPassFilter.h"
-template<typename sampleType>
-AllPassFilter<sampleType>::AllPassFilter()   
+template<typename SampleType>
+AllPassFilter<SampleType>::AllPassFilter()   
 {
 
 }
 
-template<typename sampleType>
-AllPassFilter<sampleType>::~AllPassFilter()
+template<typename SampleType>
+AllPassFilter<SampleType>::~AllPassFilter()
 {
 
 }
 
-template<typename sampleType>
-sampleType AllPassFilter<sampleType>::calcOutput(sampleType x)
+template<typename SampleType>
+SampleType AllPassFilter<SampleType>::calcOutput(SampleType x)
 {
     
-    sampleType output;
-    sampleType theta = juce::MathConstants<sampleType>::twoPi * fc / sampleRate; //twoPi or pi?
-    sampleType cosTheta = std::cos(theta);
+    SampleType output;
+    SampleType theta = juce::MathConstants<SampleType>::twoPi * fc / sampleRate; //twoPi or pi?
+    SampleType cosTheta = std::cos(theta);
     output = R * R * x - 2 * R * cosTheta * delay1X + delay2X - R * R * delay2Y+ 2 * R * cosTheta * delay1Y;
     delay2Y = delay1Y;
     delay1Y = output;
@@ -37,26 +37,26 @@ sampleType AllPassFilter<sampleType>::calcOutput(sampleType x)
     return output;
 }
 
-template<typename sampleType>
-void AllPassFilter<sampleType>::setCutoffFrequency(sampleType myfc)
+template<typename SampleType>
+void AllPassFilter<SampleType>::setCutoffFrequency(SampleType myfc)
 {
     fc = myfc;
 }
 
-template<typename sampleType>
-void AllPassFilter<sampleType>::setR(sampleType myR)
+template<typename SampleType>
+void AllPassFilter<SampleType>::setR(SampleType myR)
 {
     R = myR;
 }
 
-template<typename sampleType>
-void AllPassFilter<sampleType>::setSampleRate(sampleType mySampleRate)
+template<typename SampleType>
+void AllPassFilter<SampleType>::setSampleRate(SampleType mySampleRate)
 {
     sampleRate = mySampleRate;
 }
 
-template<typename sampleType>
-void AllPassFilter<sampleType>::reset()
+template<typename SampleType>
+void AllPassFilter<SampleType>::reset()
 {
     delay1X = 0, delay2X = 0, delay1Y = 0, delay2Y = 0;
     R = 0.5;

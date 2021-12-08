@@ -10,18 +10,18 @@
 
 #include "LFO.h"
 
-template<typename sampleType>
-LFO<sampleType>::LFO() :waveType(Wave::sine)
+template<typename SampleType>
+LFO<SampleType>::LFO() :waveType(Wave::sine)
 {
-    sampleType theta;
-    sampleType sine;
-    sampleType slope;
+    SampleType theta;
+    SampleType sine;
+    SampleType slope;
 
     /*sine and square build*/
 
     for (int i = 0; i < 44100; ++i)
     {
-        theta = juce::MathConstants<sampleType>::twoPi* i / 44100;
+        theta = juce::MathConstants<SampleType>::twoPi* i / 44100;
         sine = std::sin(theta);
         sineWave[i] = sine;
         squareWave[i] = (sine > 0) ? 1 : -1;
@@ -74,42 +74,42 @@ LFO<sampleType>::LFO() :waveType(Wave::sine)
     
 }
 
-template<typename sampleType>
-LFO<sampleType>::~LFO()
+template<typename SampleType>
+LFO<SampleType>::~LFO()
 {
 
 }
 
-template<typename sampleType>
-void LFO<sampleType>::setFrequency(sampleType newFrequency)
+template<typename SampleType>
+void LFO<SampleType>::setFrequency(SampleType newFrequency)
 {
     
     frequency = newFrequency;
     
 }
 
-/*template<typename sampleType>
-void LFO<sampleType>::setLevel(sampleType newLevel)
+/*template<typename SampleType>
+void LFO<SampleType>::setLevel(SampleType newLevel)
 {
     level = newLevel;
 }*/
 
-template<typename sampleType>
-void LFO<sampleType>::setWaveForm(Wave newWaveType)
+template<typename SampleType>
+void LFO<SampleType>::setWaveForm(Wave newWaveType)
 {
     waveType = newWaveType;
 }
 
-template<typename sampleType>
-void LFO<sampleType>::setSampleRate(sampleType newSampleRate)
+template<typename SampleType>
+void LFO<SampleType>::setSampleRate(SampleType newSampleRate)
 {
     sampleRate = newSampleRate;
 }
 
-template<typename sampleType>
-sampleType LFO<sampleType>::getCurrentValue()
+template<typename SampleType>
+SampleType LFO<SampleType>::getCurrentValue()
 {
-    sampleType* output;
+    SampleType* output;
     int index;
     currentAngle += (frequency / sampleRate);
     if (currentAngle >= 1)
@@ -140,8 +140,8 @@ sampleType LFO<sampleType>::getCurrentValue()
     return *(output+index);
 }
 
-template<typename sampleType>
-void LFO<sampleType>::reset()
+template<typename SampleType>
+void LFO<SampleType>::reset()
 {
     frequency = 5, currentAngle = 0;
 }

@@ -10,7 +10,7 @@
 #include <JuceHeader.h>
 #pragma once
 
-template<typename sampleType>
+template<typename SampleType>
 class LFO
 {
 public:
@@ -20,26 +20,26 @@ public:
 
     enum class Wave { sine, square, triangle, sawtooth };
 
-    void setFrequency(sampleType newFrequency);
+    void setFrequency(SampleType newFrequency);
 
-    //void setLevel(sampleType newLevel);
+    //void setLevel(SampleType newLevel);
 
     void setWaveForm(Wave newWaveType);
 
-    void setSampleRate(sampleType newSampleRate);
+    void setSampleRate(SampleType newSampleRate);
 
     void reset();
 
-    sampleType getCurrentValue();
+    SampleType getCurrentValue();
 
 private:
-    sampleType sampleRate = 44100;
-    sampleType frequency = 1, currentAngle = 0;
+    SampleType sampleRate = 44100;
+    SampleType frequency = 1, currentAngle = 0;
 
-    sampleType sineWave[44100];
-    sampleType squareWave[44100];
-    sampleType triangleWave[44100];
-    sampleType sawtoothWave[44100];
+    SampleType sineWave[44100];
+    SampleType squareWave[44100];
+    SampleType triangleWave[44100];
+    SampleType sawtoothWave[44100];
 
     Wave waveType;
 };
