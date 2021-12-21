@@ -16,7 +16,7 @@ Phaser<SampleType>::Phaser()
     for (auto n = 0; n < numStages; ++n)
     {
         filters.add(new AllPassFilter<SampleType>());
-        //filters.getUnchecked(n)->setCutoffFrequency(1000 * (n + 1));
+
         
     }
     dryWet.setMixingRule(juce::dsp::DryWetMixingRule::linear);
@@ -31,7 +31,6 @@ Phaser<SampleType>::~Phaser()
 template <typename SampleType>
 void Phaser<SampleType>::setSpec(juce::dsp::ProcessSpec &spec)
 {
-    /*To Do*/
     dryWet.prepare(spec);
     auto specDown = spec;
     specDown.sampleRate /= (double)maxUpdateCounter;

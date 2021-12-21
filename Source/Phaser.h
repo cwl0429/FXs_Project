@@ -79,7 +79,7 @@ public:
                 for (int j = 0; j < numStages; ++j)
                     filters[j]->setCutoffFrequency(frequency[k] * 2000+ centreFrequency);
 
-                /*for (int j = 0; j < numStages; ++j)
+             /*   for (int j = 0; j < numStages; ++j)
                     filters[j]->setR(frequency[k] * 0.1 + normCentreFrequency);*/
 
                 k++;
