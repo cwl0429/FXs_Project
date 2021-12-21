@@ -127,14 +127,18 @@ void FXs_ProjectAudioProcessor::prepareToPlay (double sampleRate, int samplesPer
     mySynth.setCurrentPlaybackSampleRate(sampleRate);
     singleChannelSampleFifo.prepare(samplesPerBlock);
 
-   /* juce::dsp::ProcessSpec spec;
-    spec.maximumBlockSize = samplesPerBlock;
-    spec.numChannels = getMainBusNumOutputChannels();
-    spec.sampleRate = sampleRate;
+	/*phaser.prepare(spec);*/
 
-    phaser.prepare(spec);*/
+	/*Chorus spec setting*/
+	juce::dsp::ProcessSpec spec;
+	spec.maximumBlockSize = samplesPerBlock;
+	spec.numChannels = getMainBusNumOutputChannels();
+	spec.sampleRate = sampleRate;
+	blockSize = spec.maximumBlockSize;
 
-
+	chorus.prepare(spec);
+	delay.prepare(spec);
+	dl.prepare(spec);
 }
 
 void FXs_ProjectAudioProcessor::releaseResources()
@@ -201,14 +205,37 @@ void FXs_ProjectAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
     //phaser.setMix(0.5);
     mySynth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
     
-    /*auto block = juce::dsp::AudioBlock<float> (buffer);
-    auto context = juce::dsp::ProcessContextReplacing<float> (block);
-    phaser.process(context);*/
+    //auto block = juce::dsp::AudioBlock<float> (buffer);
+    //auto context = juce::dsp::ProcessContextReplacing<float> (block);
+    //phaser.process(context);
 
 
-    singleChannelSampleFifo.update(buffer);
+	juce::AudioBuffer<float> delayBuffer;
+	delayBuffer.setSize(2, blockSize, false, false, true);
 
-    
+	//delay.process(buffer);
+	//dl.process(context);
+	//buffer.clear(0, 0, buffer.getNumSamples()); 
+	//buffer.clear(1, 0, buffer.getNumSamples());
+	//for (int channel = 0; channel < buffer.getNumChannels(); channel++)
+	//{
+	//	auto *dBuffer = delayBuffer.getWritePointer(channel);
+	//	
+	//	for (int i = 0; i < blockSize; ++i) {
+	//		//auto *delaySample = delay.getDelaySample(channel, 960);
+	//		
+	//		dBuffer[i] = *delaySample;
+	//		//buffer.addSample(channel, i, dBuffer[i]);
+	//	}
+	//	juce::FloatVectorOperations::copy(buffer.getWritePointer(channel, 0), dBuffer, blockSize);
+
+	//	
+	//}
+
+	
+	chorus.process(buffer);
+    //singleChannelSampleFifo.update(buffer);//spectrum visulization
+
 }
 
 //==============================================================================

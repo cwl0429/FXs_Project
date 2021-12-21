@@ -12,9 +12,14 @@
 #include "SynthSound.h"
 #include "SynthVoice.h"
 #include "FIFO.h"
+#include "Chorus.h"
+
+
+#include "Delayline.h"
 //==============================================================================
 /**
 */
+
 class FXs_ProjectAudioProcessor  : public juce::AudioProcessor
 {
 public:
@@ -59,14 +64,18 @@ public:
 private:
     //==============================================================================
     juce::Synthesiser mySynth;
-    
+	juce::dsp::DelayLine<float> dl;
+
 
     SingleChannelSampleFifo<juce::AudioBuffer<float>> singleChannelSampleFifo{ 0 };  //queue for waveform
     double lastSampleRate;
 
     juce::dsp::Phaser<float> phaser;
+	Chorus<float> chorus;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FXs_ProjectAudioProcessor)
 
+	Delayline<float> delay;
+	int blockSize;
 
 };
