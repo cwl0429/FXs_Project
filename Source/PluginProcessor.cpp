@@ -22,24 +22,24 @@ FXs_ProjectAudioProcessor::FXs_ProjectAudioProcessor()
                      #endif
                        ), tree(*this, nullptr, "PARAM",
                            {/*TO DO*/
-                           SliderParameter("level","Level",1,0,0.2,0.1),
-                           SliderParameter("rate","Rate",20,1,5,1),
-                           SliderParameter("depth","Depth",0.99,0.01,0.8,0.01),
-                           SliderParameter("cutoff","Cutoff",20000,0,1300,100),
+                           SliderParameter("feedback","Feedback",1,-1,0.0,0.05),
+                           SliderParameter("rate","Rate",20,1,2,1),
+                           SliderParameter("depth","Depth",0.99,0.01,0.5,0.01),
+                           //SliderParameter("cutoff","Cutoff",20000,0,1300,100),
                            SliderParameter("mix","Mix",1,0,0.5,0.1),
                            std::make_unique<juce::AudioParameterChoice>("wave",
                                "Wave",
                                juce::StringArray({ "Sine","Square","Sawtooth","Triangle" }),1) })
 #endif 
 {
-    mySynth.clearSounds();
+    /*mySynth.clearSounds();
     mySynth.addSound(new SynthSound());
 
     mySynth.clearVoices();
     for (int i = 0; i < 5; i++)
     {
         mySynth.addVoice(new SynthVoice());
-    }
+    }*/
 }
 
 FXs_ProjectAudioProcessor::~FXs_ProjectAudioProcessor()
@@ -137,8 +137,9 @@ void FXs_ProjectAudioProcessor::prepareToPlay (double sampleRate, int samplesPer
 	blockSize = spec.maximumBlockSize;
 
 	chorus.prepare(spec);
-	delay.prepare(spec);
-	dl.prepare(spec);
+    //ch.prepare(spec);
+	//delay.prepare(spec); //only test my delayline
+	//dl.prepare(spec); //JUCE delayline
 }
 
 void FXs_ProjectAudioProcessor::releaseResources()
@@ -179,22 +180,26 @@ void FXs_ProjectAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
-    
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
    
-    for (int i = 0; i < mySynth.getNumVoices(); i++)
+    for (int i = 0; i < getMainBusNumOutputChannels(); i++)
     {
-        auto* myVoice = dynamic_cast<SynthVoice*>(mySynth.getVoice(i));
+        /*For midi input*/
+        /*auto* myVoice = dynamic_cast<SynthVoice*>(mySynth.getVoice(i));
         myVoice->setParam(
             tree.getRawParameterValue("level")->load(),
             tree.getRawParameterValue("rate")->load(),
             tree.getRawParameterValue("depth")->load(),
             tree.getRawParameterValue("cutoff")->load(),
             tree.getRawParameterValue("mix")->load()
-           
-        );
+
+        );*/
+        chorus.setFeedback(tree.getRawParameterValue("feedback")->load());
+        chorus.setRate(tree.getRawParameterValue("rate")->load());
+        chorus.setDepth(tree.getRawParameterValue("depth")->load());
+        chorus.setDryWet(tree.getRawParameterValue("mix")->load());
         
     }
 
@@ -203,15 +208,16 @@ void FXs_ProjectAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
     //phaser.setFeedback(0.5);
     //phaser.setRate(5);
     //phaser.setMix(0.5);
-    mySynth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
-    
-    //auto block = juce::dsp::AudioBlock<float> (buffer);
-    //auto context = juce::dsp::ProcessContextReplacing<float> (block);
+    /*mySynth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
+    ch.setRate(5);*/
+    auto block = juce::dsp::AudioBlock<float> (buffer);
+    auto context = juce::dsp::ProcessContextReplacing<float> (block);
+    //ch.process(context); juce chorus
     //phaser.process(context);
 
 
-	juce::AudioBuffer<float> delayBuffer;
-	delayBuffer.setSize(2, blockSize, false, false, true);
+	/*juce::AudioBuffer<float> delayBuffer;
+	delayBuffer.setSize(2, blockSize, false, false, true);*/
 
 	//delay.process(buffer);
 	//dl.process(context);
@@ -232,8 +238,12 @@ void FXs_ProjectAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
 	//	
 	//}
 
-	
-	chorus.process(buffer);
+
+	/*delay line 雙聲道有雜音, 用JUCE的可以, 猜測是架構沒效率
+	chorus也有問題 用JCCE的delay line, 聲音仍有雜訊 don't know why*/
+    //chorus.setRate(3);
+    //chorus.setDryWet(0.5);
+	chorus.process(context);
     //singleChannelSampleFifo.update(buffer);//spectrum visulization
 
 }

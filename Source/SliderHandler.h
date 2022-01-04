@@ -18,7 +18,7 @@ class RotarySliderWithLabel : public juce::Component
 {
 public:
     RotarySliderWithLabel(FXs_ProjectAudioProcessor& audioProcessor, juce::String titleName, juce::String unit);
-    //~RotarySliderWithLabel();
+    ~RotarySliderWithLabel();
 
     void paint(juce::Graphics&)override;
     void resized() override;
@@ -48,10 +48,10 @@ private:
     RotarySliderWithLabel levelSlider;
     RotarySliderWithLabel a_Slider;
     RotarySliderWithLabel d_Slider;
-    RotarySliderWithLabel s_Slider;
+    //RotarySliderWithLabel s_Slider;
     RotarySliderWithLabel r_Slider;
 
-    std::vector<RotarySliderWithLabel*> sliders{ &levelSlider, &a_Slider, &d_Slider, &s_Slider, &r_Slider };
+    std::vector<RotarySliderWithLabel*> sliders{  &a_Slider, &d_Slider, &r_Slider, &levelSlider };//&s_Slider
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SliderHandler);
 };

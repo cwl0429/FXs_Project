@@ -1,8 +1,6 @@
 /*
   ==============================================================================
-
     This file contains the basic framework code for a JUCE plugin editor.
-
   ==============================================================================
 */
 
@@ -17,14 +15,14 @@
 //==============================================================================
 /**
 */
-class FXs_ProjectAudioProcessorEditor  : public juce::AudioProcessorEditor
+class FXs_ProjectAudioProcessorEditor : public juce::AudioProcessorEditor
 {
 public:
-    FXs_ProjectAudioProcessorEditor (FXs_ProjectAudioProcessor&);
+    FXs_ProjectAudioProcessorEditor(FXs_ProjectAudioProcessor&);
     ~FXs_ProjectAudioProcessorEditor() override;
 
     //==============================================================================
-    void paint (juce::Graphics&) override;
+    void paint(juce::Graphics&) override;
     void resized() override;
 
 private:
@@ -32,12 +30,10 @@ private:
     // access the processor object that created it.
     FXs_ProjectAudioProcessor& audioProcessor;
 
-    juce::ComboBox synthChoose;
     SliderHandler sliderSet;
-    Oscilloscope oscilloscope;
-    Spectrum spectrum;
 
-    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> waveComboBoxAttachment;
-    std::vector<juce::Component*> subComponents{ &oscilloscope, &sliderSet ,&spectrum };
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FXs_ProjectAudioProcessorEditor)
+
+
+    std::vector<juce::Component*> subComponents{ &sliderSet };
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(FXs_ProjectAudioProcessorEditor)
 };

@@ -65,7 +65,7 @@ private:
     //==============================================================================
     juce::Synthesiser mySynth;
 	juce::dsp::DelayLine<float> dl;
-
+    juce::dsp::Chorus<float> ch; 
 
     SingleChannelSampleFifo<juce::AudioBuffer<float>> singleChannelSampleFifo{ 0 };  //queue for waveform
     double lastSampleRate;

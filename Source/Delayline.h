@@ -18,34 +18,28 @@ public:
 	~Delayline();
 	void prepare(juce::dsp::ProcessSpec& spec);
 	void reset();
-	void fillBuffer(int channel, SampleType* channelData, SampleType bufferSize);//, SampleType delayBufferSize
 
-	void process(juce::AudioBuffer<SampleType>& buffer) {
+	//template <typename ProcessContext>
+	SampleType process(SampleType channel, SampleType sample, int delayNum) noexcept {//const ProcessContext& context, 
 
-		bufferSize = buffer.getNumSamples();
-		
-		for (int channel = 0; channel < buffer.getNumChannels(); channel++) 
-		{ 
-			auto* channelData = buffer.getWritePointer(channel);
-			fillBuffer(channel, channelData, bufferSize); //, delayBufferSize
-		}
+		delayBuffer.setSample(channel, writePosition[channel], sample);//size_t??
+		writePosition[channel] = (writePosition[channel] + 1) % totalSize;
 
-		writePosition += bufferSize;
-		writePosition = fmod(writePosition,delayBufferSize);
-		
+		auto index = (readPosition[channel] - delayNum + totalSize) % totalSize;
+		auto result = delayBuffer.getSample(channel, index);
+
+		readPosition[channel] = (readPosition[channel] + 1) % totalSize;
+
+		return result;
 	}
 
-	SampleType* getDelaySample(int channel, SampleType delayNum);
+	/*SampleType* getDelaySample(int channel, SampleType delayNum);
 	SampleType getWritePosition();
 	SampleType getDelayBufferSize();
-	const SampleType* getDelayBufferReadPointer(int channel, int readPosition);
+	const SampleType* getDelayBufferReadPointer(int channel, int readPosition);*/
 
 private:
 	juce::AudioBuffer<SampleType> delayBuffer;
-	SampleType bufferSize;
-	SampleType delayBufferSize;
-	SampleType writePosition{ 0 };
-	SampleType readPosition{ 0 };
-	SampleType currentPosition{ 0 };
-	
+	int totalSize = 56;//56;//max delay num of samples
+	std::vector<int> writePosition, readPosition;
 };

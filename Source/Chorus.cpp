@@ -24,24 +24,21 @@ Chorus<SampleType>::~Chorus()
 
 
 //template <typename SampleType>
-//void Chorus<SampleType>::mixWithDelayBuffer(juce::AudioBuffer<SampleType>& buffer, int channel, int readPosition, int bufferSize, SampleType delayBufferSize){
-//
-//	
-//}
-
-//template <typename SampleType>
 //void Chorus<SampleType>::setShape() {
 //	lfo.setWaveForm(LFO<SampleType>::Wave::sine);//LFO要可選擇
 //}
 
 template <typename SampleType>
 void Chorus<SampleType>::setRate(SampleType newRate) {
-	lfo.setFrequency(newRate); //UI
+	lfo.setFrequency(newRate); //1~20
 }
 
 template <typename SampleType>
 void Chorus<SampleType>::setDepth(SampleType newDepth) {
-	//寫死
+	
+	depth = newDepth;
+
+	
 }
 
 template <typename SampleType>
@@ -53,38 +50,39 @@ void Chorus<SampleType>::setDryWet(SampleType newMix) {
 }
 
 template <typename SampleType>
-void Chorus<SampleType>::prepare(juce::dsp::ProcessSpec spec){
+void Chorus<SampleType>::setFeedback(SampleType newFeedback) {
 
-	bufferFrequency.setSize(1, (int)spec.maximumBlockSize, false, false, true);//initialization
-	delayBuffer.setSize(2, (int)spec.maximumBlockSize, false, false, true);//initialization
-	delay.prepare(spec);
-	dryWet.prepare(spec);
-	const auto maxPossibleDelay = 2000;
-	dl = juce::dsp::DelayLine<SampleType, juce::dsp::DelayLineInterpolationTypes::Linear>{ static_cast<int> (maxPossibleDelay) };
-	dl.prepare(spec);
-	
-
-	//reset();
+	feedback = newFeedback;
 
 }
 
 
-//template <typename SampleType>
-//void Chorus<SampleType>::update(SampleType newRate, SampleType newDepth, SampleType newMix) {
-//
-//	setShape();//
-//	setRate(newRate);
-//	setDepth(newDepth);
-//	setDryWet(newMix);
-//
-//}
+template <typename SampleType>
+void Chorus<SampleType>::prepare(juce::dsp::ProcessSpec& spec){
+
+	bufferFrequency.setSize(1, (int)spec.maximumBlockSize, false, false, true);//initialization
+	
+	delay.prepare(spec);
+	dryWet.prepare(spec);
+
+	dryWet.reset();
+	//reset();
+
+	//JUCE delay line
+	/*const auto maxpossibledelay = 2000;
+	dl = juce::dsp::DelayLine<SampleType, juce::dsp::DelayLineInterpolationTypes::Linear>{ static_cast<int> (maxpossibledelay) };
+	dl.prepare(spec);*/
+	
+
+
+}
+
 
 template <typename SampleType>
 void Chorus<SampleType>::reset() {
 
-	delay.reset();
+	//delay.reset();
 	dryWet.reset();
-
 
 }
 template class Chorus<float>;

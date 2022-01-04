@@ -9,12 +9,12 @@
 */
 
 #include "SliderHandler.h"
-//#include <JuceHeader.h>
+#include <JuceHeader.h>
 
 RotarySliderWithLabel::RotarySliderWithLabel(FXs_ProjectAudioProcessor& audioProcessor, juce::String titleName,juce::String unit) :
     processor(audioProcessor)
 {
-    //setLookAndFeel(&lnf);
+    setLookAndFeel(&lnf);
     slider.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalDrag);
     slider.setTextBoxStyle(juce::Slider::TextBoxBelow,
         true,
@@ -29,10 +29,10 @@ RotarySliderWithLabel::RotarySliderWithLabel(FXs_ProjectAudioProcessor& audioPro
     addAndMakeVisible(slider);
 }
 
-/*RotarySliderWithLabel::~RotarySliderWithLabel()
+RotarySliderWithLabel::~RotarySliderWithLabel()
 {
-
-}*/
+    setLookAndFeel(nullptr);
+}
 
 void RotarySliderWithLabel::paint(juce::Graphics& g)
 {
@@ -52,10 +52,10 @@ void RotarySliderWithLabel::resized()
 
 SliderHandler::SliderHandler(FXs_ProjectAudioProcessor& p) :
     processor(p),
-    levelSlider(p,"Level",""),
+    levelSlider(p,"Feedback",""),
     a_Slider(p,"Rate",""),
     d_Slider(p,"Depth", ""),
-    s_Slider(p,"Cutoff", ""),
+    //s_Slider(p,"Cutoff", ""),
     r_Slider(p,"Mix", "")
 {
     for (auto& slider : sliders)
